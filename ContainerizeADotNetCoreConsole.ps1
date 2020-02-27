@@ -31,34 +31,31 @@ docker images
 Add-Content -Path .\Dockerfile -Value 'COPY app/bin/Release/netcoreapp3.1/publish/ app/'
 Add-Content -Path .\Dockerfile -Value 'ENTRYPOINT ["dotnet", "app/myapp.dll"]'
 
-docker build -t myimage -f Dockerfile . 
+docker build -t myimage:latest -f Dockerfile . 
 
 Write-Host "docker images"
 docker images
 
+$mycontainer="mycontainer"
+
 Write-Host "docker create myimage"
-$containerId=docker create myimage
+$containerId=docker create --name $mycontainer myimage
 
 Write-Host "docker start $containerId"
 docker start $containerId
 
 # Write-Host "docker stop $containerId"
-# docker stop $containerId
-
-# Write-Host "docker start $containerId"
-# docker start $containerId
-
-Write-Host "docker attach --sig-proxy=false $containerId"
-docker attach --sig-proxy=false $containerId
-
-Write-Host "docker stop $containerId"
 docker stop $containerId
 
-docker run -it --rm myimage
+docker container run myimage
+
+# docker ps -a -q  --filter ancestor=myimage
+docker ps -a --filter "name=myimagename"
 
 docker run -it --rm --entrypoint "bash" myimage
-ls app
-# docker rm $containerId
+
+# docker execute -it myimage echo "I'm inside the container!"
+
 
 # come back to where we started initially
 Pop-Location
