@@ -67,3 +67,8 @@ docker stop $(docker ps -a -q)
 docker rm $(docker ps -a -q)
 # docker rmi myimage
 docker rmi -f $(docker images -a -q)
+
+#Clean up from previous runs
+docker rmi myimage
+Remove-Item $folderpath -Recurse -ErrorAction Ignore
+Remove-Item "Dockerfile" -Recurse -ErrorAction Ignore
